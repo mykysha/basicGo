@@ -1,5 +1,8 @@
 ### Go ###
 
+# Miscellanious programs that are used for testing algorythms and ideas
+misc
+
 # Binaries for programs and plugins
 *.exe
 *.exe~
