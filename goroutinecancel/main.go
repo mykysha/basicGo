@@ -3,22 +3,20 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"golang.org/x/term"
 	"log"
 	"os"
 	"time"
+
+	"golang.org/x/term"
 )
 
 // main func starts new goroutine and waits for user to stop its execution.
 func main() {
 	l := log.New(os.Stdout, "gc ", log.Ltime)
-	l.Println("logger created")
-
 	out := bufio.NewWriter(os.Stdout)
-	l.Println("output configured")
-
 	in := bufio.NewReader(os.Stdin)
-	l.Println("input configured")
+
+	l.Println("input/output and logger configured")
 
 	var (
 		wasAliveFor time.Duration
@@ -30,29 +28,7 @@ func main() {
 	go routine(&wasAliveFor, &reachedEnd, signal)
 	l.Println("routine started")
 
-	oldState, err := term.MakeRaw(int(os.Stdin.Fd()))
-	if err != nil {
-		l.Fatalln(err)
-	}
-
-	defer func(fd int, oldState *term.State) {
-		err = term.Restore(fd, oldState)
-		if err != nil {
-			l.Println(err)
-		}
-	}(int(os.Stdin.Fd()), oldState)
-
-	_, err = out.WriteString("press any key to kill goroutine\n")
-	if err != nil {
-		l.Println(err)
-	}
-
-	err = out.Flush()
-	if err != nil {
-		l.Println(err)
-	}
-
-	_, err = in.ReadByte()
+	err := waitForKill(in, out)
 	if err != nil {
 		l.Println(err)
 	}
@@ -69,12 +45,7 @@ func main() {
 		msg += "routine had not reached its end\n"
 	}
 
-	_, err = out.WriteString(msg)
-	if err != nil {
-		l.Println(err)
-	}
-
-	err = out.Flush()
+	err = write(msg, out)
 	if err != nil {
 		l.Println(err)
 	}
@@ -84,6 +55,8 @@ func main() {
 
 // routine counts how long it was alive.
 func routine(isAliveFor *time.Duration, e *bool, s chan interface{}) {
+	var sleepTime time.Duration = 100
+
 	start := time.Now()
 
 	for {
@@ -95,7 +68,49 @@ func routine(isAliveFor *time.Duration, e *bool, s chan interface{}) {
 
 			*e = true
 
-			time.Sleep(100 * time.Millisecond)
+			time.Sleep(sleepTime * time.Millisecond)
 		}
 	}
+}
+
+func waitForKill(in *bufio.Reader, out *bufio.Writer) error {
+	oldState, err := term.MakeRaw(int(os.Stdin.Fd()))
+	if err != nil {
+		return fmt.Errorf("making terminal raw: %w", err)
+	}
+
+	defer func(fd int, oldState *term.State) error {
+		err = term.Restore(fd, oldState)
+		if err != nil {
+			return fmt.Errorf("restoring usual terminal: %w", err)
+		}
+
+		return nil
+	}(int(os.Stdin.Fd()), oldState)
+
+	err = write("press any key to kill goroutine\n", out)
+	if err != nil {
+		return fmt.Errorf("prompting to kill: %w", err)
+	}
+
+	_, err = in.ReadByte()
+	if err != nil {
+		return fmt.Errorf("reading info: %w", err)
+	}
+
+	return nil
+}
+
+func write(msg string, out *bufio.Writer) error {
+	_, err := out.WriteString(msg)
+	if err != nil {
+		return fmt.Errorf("write: %w", err)
+	}
+
+	err = out.Flush()
+	if err != nil {
+		return fmt.Errorf("flush: %w", err)
+	}
+
+	return nil
 }

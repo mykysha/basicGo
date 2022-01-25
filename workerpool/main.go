@@ -11,6 +11,7 @@ import (
 
 func main() {
 	var zones []int
+
 	out := bufio.NewWriter(os.Stdout)
 
 	for i := -11; i < 13; i++ {

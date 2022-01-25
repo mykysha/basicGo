@@ -40,13 +40,15 @@ func count(start int, end int) chan int {
 }
 
 func main() {
+	r := 99
 	out := bufio.NewWriter(os.Stdout)
+
 	err := writeLine("calculating 100 pseudorandom numbers", out)
 	if err != nil {
 		log.Println(err)
 	}
 
-	for i := range count(1, 99) {
+	for i := range count(1, r) {
 		msg := fmt.Sprintf("number %d was generated", i)
 
 		err = writeLine(msg, out)
