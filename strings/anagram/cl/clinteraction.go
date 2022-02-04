@@ -36,7 +36,7 @@ func NewReader(in *bufio.Reader) func() ([]rune, error) {
 
 		word := []rune(string(b))
 
-		if !isAWord(word) {
+		if isAWord(word) == false {
 			return nil, fmt.Errorf("examine: %w", errNotAWord)
 		}
 

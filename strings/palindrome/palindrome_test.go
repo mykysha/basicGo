@@ -2,10 +2,11 @@ package main
 
 import (
 	"bufio"
-	"github.com/nndergunov/basicGo/strings/palindrome/pool"
 	"io"
 	"os"
 	"testing"
+
+	"github.com/nndergunov/basicGo/strings/palindrome/pool"
 )
 
 func TestPalindromesSingleThread(t *testing.T) {

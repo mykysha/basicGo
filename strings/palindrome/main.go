@@ -3,11 +3,12 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"github.com/nndergunov/basicGo/strings/palindrome/cl"
-	"github.com/nndergunov/basicGo/strings/palindrome/pool"
 	"log"
 	"os"
 	"unicode"
+
+	"github.com/nndergunov/basicGo/strings/palindrome/cl"
+	"github.com/nndergunov/basicGo/strings/palindrome/pool"
 )
 
 func main() {
