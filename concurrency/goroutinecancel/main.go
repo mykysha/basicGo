@@ -3,10 +3,11 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"golang.org/x/term"
 	"log"
 	"os"
 	"time"
+
+	"golang.org/x/term"
 )
 
 // main func starts new goroutine and waits for user to stop its execution.
