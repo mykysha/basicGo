@@ -1,13 +1,16 @@
-package main
+package cl
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"unicode"
 )
 
-// write puts line in output.
-func newWriter(out *bufio.Writer) func(s string) error {
+var errNotAWord = errors.New("the string that was read is not a word")
+
+// NewWriter puts line in output.
+func NewWriter(out *bufio.Writer) func(s string) error {
 	return func(s string) error {
 		_, err := out.WriteString(s)
 		if err != nil {
@@ -23,8 +26,8 @@ func newWriter(out *bufio.Writer) func(s string) error {
 	}
 }
 
-// read gets line from input and returns whole line and separated in two halves.
-func newReader(in *bufio.Reader) func() ([]rune, error) {
+// NewReader gets line from input and returns whole line and separated in two halves.
+func NewReader(in *bufio.Reader) func() ([]rune, error) {
 	return func() ([]rune, error) {
 		b, _, err := in.ReadLine()
 		if err != nil {

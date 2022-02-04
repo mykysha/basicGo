@@ -2,21 +2,19 @@ package main
 
 import (
 	"bufio"
-	"errors"
 	"fmt"
+	"github.com/nndergunov/basicGo/strings/palindrome/cl"
 	"github.com/nndergunov/basicGo/strings/palindrome/pool"
 	"log"
 	"os"
 	"unicode"
 )
 
-var errNotAWord = errors.New("the string that was read is not a word")
-
 func main() {
 	out := bufio.NewWriter(os.Stdout)
-	writer := newWriter(out)
+	writer := cl.NewWriter(out)
 	in := bufio.NewReader(os.Stdin)
-	reader := newReader(in)
+	reader := cl.NewReader(in)
 
 	msg := fmt.Sprint("This program will tell if your word is a palindrome\n" +
 		"Palindrome is a word that reads equally from each side\n" +
@@ -37,7 +35,7 @@ func main() {
 
 	p.Start()
 
-	substringLength := 20
+	substringLength := 10
 	substrings := makeSubstrings(word, substringLength)
 
 	resultChan := make(chan bool, len(substrings))
@@ -54,7 +52,9 @@ func main() {
 
 	res := fmt.Sprintf("The word \"%s\" is", string(word))
 
-	for result := range resultChan {
+	for i := 0; i < len(substrings); i++ {
+		result := <-resultChan
+
 		if !result {
 			res += " not"
 		}
@@ -74,6 +74,12 @@ func main() {
 func makeSubstrings(word []rune, substringLength int) [][]rune {
 	var substrings [][]rune
 
+	if len(word) <= substringLength {
+		substrings = append(substrings, word)
+
+		return substrings
+	}
+
 	if substringLength < 2 {
 		substringLength = 2
 	}
@@ -81,29 +87,31 @@ func makeSubstrings(word []rune, substringLength int) [][]rune {
 	substringLength /= 2
 
 	firstHalf := word[:len(word)/2]
-	secondHalf := word[len(word)/2:]
+	secondHalf := word[(len(word) - len(word)/2):]
 
-	for from, till := 0, substringLength; till < len(firstHalf); from, till = from+substringLength, till+substringLength {
+	for from, till := 0, substringLength; till <= len(firstHalf); from, till = from+substringLength, till+substringLength {
 		substring := make([]rune, substringLength*2)
 
 		firstSubstring := firstHalf[from:till]
 		secondSubstring := secondHalf[len(secondHalf)-till : len(secondHalf)-from]
 
 		copy(substring, firstSubstring)
-		copy(substring[10:], secondSubstring)
+		copy(substring[substringLength:], secondSubstring)
 
 		substrings = append(substrings, substring)
 	}
 
-	tail := len(firstHalf) % substringLength
-	wrote := len(firstHalf) - tail
+	if len(word)%substringLength != 0 {
+		tail := len(firstHalf) % substringLength
+		wrote := len(firstHalf) - tail
 
-	lastSubstring := make([]rune, tail*2)
+		lastSubstring := make([]rune, tail*2)
 
-	copy(lastSubstring, firstHalf[wrote:])
-	copy(lastSubstring[tail:], secondHalf[:len(secondHalf)-wrote])
+		copy(lastSubstring, firstHalf[wrote:])
+		copy(lastSubstring[tail:], secondHalf[:len(secondHalf)-wrote])
 
-	substrings = append(substrings, lastSubstring)
+		substrings = append(substrings, lastSubstring)
+	}
 
 	return substrings
 }
