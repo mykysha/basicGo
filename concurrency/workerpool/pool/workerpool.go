@@ -15,12 +15,6 @@ func (p *Pool) Start() {
 	for i := 0; i < p.workerNumber; i++ {
 		go func() {
 			for task := range p.taskChan {
-				//select {
-				//case <-p.stopChan:
-				//	log.Println("finishing")
-				//
-				//	break
-				//}
 				task()
 			}
 		}()
