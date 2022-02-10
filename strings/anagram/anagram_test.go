@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/nndergunov/basicGo/strings/anagram/anagramfinder"
 	"testing"
 )
 
@@ -14,22 +15,46 @@ func TestAnagrams(t *testing.T) {
 		secondWord     string
 		expectedResult bool
 	}{
-		{"Fist upper palindrome", "Anna", "", true},
-		{"All upper palindrome", "RACECAR", "", true},
-		{"Upper and lower palindrome", "TeNeT", "", true},
-		{"All lower palindrome", "mom", "", true},
-		{"Very long palindrome", fmt.Sprint(
-			"Annacivickayaklevelmadammomnoonracecarradarredderreferrepaperrotatorrotorsagassolosstatstenetwow" +
-				"wowtenetstatssolossagasrotorrotatorrepaperreferredderradarracecarnoonmommadamlevelkayakcivicanna"),
-			"", true},
+		{"Fist pair of anagrams", "meals", "males", true},
+		{"Second pair of anagrams", "saint", "satin", true},
+		{"Third pair of anagrams", "avenge", "Geneva", true},
+		{"Fourth pair of anagrams", "meals", "Salem", true},
+		{"Long anagrams",
+			fmt.Sprint(
+				"mealssaintavengemealssalesbalmmeansaltsblotmelonblow" +
+					"moistsharpbragmoreshrubchumneedssirencoalnervedskidscounts" +
+					"noneskillnudesnaildiaryoceansoberdomainspacesoildottierpairs" +
+					"solofiredpalesprayfringepanelsstackhastenparksstickicedpools" +
+					"stripinchportsstudykeenpoststeamlampracestooledlastreapvoteslimped" +
+					"reefwaitslionrobedwaspslootedrockwellslumproomwestmarchropeswhatmash"),
+			fmt.Sprint(
+				"malessatinGenevaSalemsealslambmanelastsboltlemonbowl" +
+					"omitsharpsgrabRomebrushmuchdenserinsecolaDenverdisksTucson" +
+					"neonkillsdunenailsdairycanoerobesMadisoncapeoilsDetroitParis" +
+					"OslofriedleappraysfingerNaplestacksAthenssparkticksdicespool" +
+					"tripschinsportdustykneestopsmeatpalmcaresToledosaltpearstovedimple" +
+					"freewaistloinboredswapsToledocorkswellplummoorstewcharmporethawshams"),
+			true},
 
-		{"First upper not a palindrome", "Word", "", false},
-		{"All upper not a palindrome", "CAPS", "", false},
-		{"Upper and lower not a palindrome", "UpPeRlOwEr", "", false},
-		{"All lower not a palindrome", "alllower", "", false},
-		{"Very long not a palindrome", "", fmt.Sprint(
-			"Thisphraseisnotsupposedtoberegardedasapalindromecauseitisnotoneasiammakingthisoneup" +
-				"sothereisexactlyzerochancethattheresultisgoingtobetruehoweveritisbettertotestthoingsoutjustincase"),
+		{"Not anagrams with different length", "word", "spaceship", false},
+		{"Not anagrams with same length", "music", "panda", false},
+		{"Not anagrams with same letters visually in eng and rus", "apec", "арес", false},
+		{"Not anagrams with same byte length", "pillow", "три", false},
+		{"Long almost anagrams",
+			fmt.Sprint(
+				"mealssaintavengemealssalesbalmmeansaltsblotmelonblow" +
+					"moistsharpbragmoreshrubchumneedssirencoalnervedskidscounts" +
+					"noneskillnudesnaildiaryoceansoberdomainspacesoildottierpairs" +
+					"solofiredpalesprayfringepanelsstackhastenparksstickicedpools" +
+					"stripinchportsstudykeenpoststeamlampracestooledlastreapvoteslimped" +
+					"reefwaitslionrobedwaspslootedrockwellslumproomwestmarchropeswhatmash"),
+			fmt.Sprint(
+				"malessatinGenevaSalemsealslambmanelastsboltlemonbowl" +
+					"omitsharpsgrabRomebrushmuchdenserinsecolaDenverdisksTucson" +
+					"neonkillsdunenailsdairycanoerobesMadisoncapeoilsDetroitParis" +
+					"OslofriedleappraysfingerNaplestacksAthenssparkticksdicespool" +
+					"tripschinsportdustykneestopsmeatpalmcaresToledosaltpearstovedimple" +
+					"freewaistloinboredswapsToledocorkswellplummoorstewcharmporethawshame"),
 			false},
 	}
 
@@ -37,6 +62,14 @@ func TestAnagrams(t *testing.T) {
 		t.Run(test.testName, func(t *testing.T) {
 			t.Parallel()
 
+			res, err := anagramfinder.Run(test.firstWord, test.secondWord)
+			if err != nil {
+				t.Errorf("unexpected error: %v", err)
+			}
+
+			if res != test.expectedResult {
+				t.Errorf("ecpected %v, got %v", test.expectedResult, res)
+			}
 		})
 	}
 }

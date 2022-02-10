@@ -15,7 +15,6 @@ func main() {
 	writer := cl.NewWriter(out)
 	in := bufio.NewReader(os.Stdin)
 	reader := cl.NewReader(in)
-	a := anagramfinder.NewAnagramFinder()
 
 	msg := "Please enter your first word:\t"
 
@@ -41,7 +40,7 @@ func main() {
 		log.Println(err)
 	}
 
-	res, err := a.Compute(firstWord, secondWord)
+	res, err := anagramfinder.Run(firstWord, secondWord)
 	if err != nil {
 		log.Println(err)
 	}

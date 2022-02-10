@@ -3,37 +3,9 @@ package anagramfinder
 import (
 	"fmt"
 	"sync"
-	"time"
 )
 
-type AnagramFinder struct {
-	firstWord            []rune
-	secondWord           []rune
-	firstWordByLetters   map[rune]uint
-	secondWordByLetters  map[rune]uint
-	firstWordByteLength  int
-	secondWordByteLength int
-	computing            bool
-}
-
-func NewAnagramFinder() *AnagramFinder {
-	a := AnagramFinder{
-		firstWord:            nil,
-		secondWord:           nil,
-		firstWordByLetters:   nil,
-		secondWordByLetters:  nil,
-		firstWordByteLength:  0,
-		secondWordByteLength: 0,
-		computing:            false,
-	}
-
-	a.firstWordByLetters = make(map[rune]uint)
-	a.secondWordByLetters = make(map[rune]uint)
-
-	return &a
-}
-
-func (a *AnagramFinder) Compute(firstWordStr, secondWordStr string) (bool, error) {
+func Run(firstWordStr, secondWordStr string) (bool, error) {
 	firstWord, err := convertToRune(firstWordStr)
 	if err != nil {
 		return false, fmt.Errorf("first word to rune conversion: %w", err)
@@ -48,26 +20,7 @@ func (a *AnagramFinder) Compute(firstWordStr, secondWordStr string) (bool, error
 		return false, fmt.Errorf("word analysis: %w", errNotAWord)
 	}
 
-	for {
-		if a.computing {
-			time.Sleep(1 * time.Second)
-
-			continue
-		}
-
-		a.computing = true
-
-		break
-	}
-
-	defer func() {
-		a.computing = false
-	}()
-
-	a.firstWord = firstWord
-	a.secondWord = secondWord
-
-	shouldCheckFurther := a.compareWordInfo()
+	shouldCheckFurther := compareWordInfo(firstWord, secondWord)
 
 	if !shouldCheckFurther {
 		return false, nil
@@ -78,26 +31,31 @@ func (a *AnagramFinder) Compute(firstWordStr, secondWordStr string) (bool, error
 
 	wg.Add(numberOfWords)
 
+	lettersChan := make(chan map[rune]uint, 2)
+
 	go func(wg *sync.WaitGroup) {
-		a.firstWordByLetters = sort(a.firstWord)
+		lettersChan <- sort(firstWord)
 
 		wg.Done()
 	}(wg)
 
 	go func(wg *sync.WaitGroup) {
-		a.secondWordByLetters = sort(a.secondWord)
+		lettersChan <- sort(secondWord)
 
 		wg.Done()
 	}(wg)
 
 	wg.Wait()
 
-	if len(a.firstWordByLetters) != len(a.secondWordByLetters) {
+	firstLetterMap := <-lettersChan
+	secondLetterMap := <-lettersChan
+
+	if len(firstLetterMap) != len(secondLetterMap) {
 		return false, nil
 	}
 
-	for key, val := range a.firstWordByLetters {
-		if val != a.secondWordByLetters[key] {
+	for key, val := range firstLetterMap {
+		if val != secondLetterMap[key] {
 			return false, nil
 		}
 	}
@@ -105,8 +63,8 @@ func (a *AnagramFinder) Compute(firstWordStr, secondWordStr string) (bool, error
 	return true, nil
 }
 
-func (a AnagramFinder) compareWordInfo() bool {
-	if len(a.firstWord) != len(a.secondWord) {
+func compareWordInfo(firstWord, secondWord []rune) bool {
+	if len(firstWord) != len(secondWord) {
 		return false
 	}
 
@@ -115,21 +73,26 @@ func (a AnagramFinder) compareWordInfo() bool {
 
 	wg.Add(numberOfWords)
 
+	lengthChan := make(chan int, 2)
+
 	go func(wg *sync.WaitGroup) {
-		a.firstWordByteLength = findByteLength(a.firstWord)
+		lengthChan <- findByteLength(firstWord)
 
 		wg.Done()
 	}(wg)
 
 	go func(wg *sync.WaitGroup) {
-		a.secondWordByteLength = findByteLength(a.secondWord)
+		lengthChan <- findByteLength(secondWord)
 
 		wg.Done()
 	}(wg)
 
 	wg.Wait()
 
-	if a.firstWordByteLength != a.secondWordByteLength {
+	firstByteLength := <-lengthChan
+	secondByteLength := <-lengthChan
+
+	if firstByteLength != secondByteLength {
 		return false
 	}
 
