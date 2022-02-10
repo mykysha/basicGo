@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/nndergunov/basicGo/strings/anagram/anagramfinder"
 	"testing"
+
+	"github.com/nndergunov/basicGo/strings/anagram/anagramfinder"
 )
 
 func TestAnagrams(t *testing.T) {
@@ -19,7 +20,8 @@ func TestAnagrams(t *testing.T) {
 		{"Second pair of anagrams", "saint", "satin", true},
 		{"Third pair of anagrams", "avenge", "Geneva", true},
 		{"Fourth pair of anagrams", "meals", "Salem", true},
-		{"Long anagrams",
+		{
+			"Long anagrams",
 			fmt.Sprint(
 				"mealssaintavengemealssalesbalmmeansaltsblotmelonblow" +
 					"moistsharpbragmoreshrubchumneedssirencoalnervedskidscounts" +
@@ -34,13 +36,15 @@ func TestAnagrams(t *testing.T) {
 					"OslofriedleappraysfingerNaplestacksAthenssparkticksdicespool" +
 					"tripschinsportdustykneestopsmeatpalmcaresToledosaltpearstovedimple" +
 					"freewaistloinboredswapsToledocorkswellplummoorstewcharmporethawshams"),
-			true},
+			true,
+		},
 
 		{"Not anagrams with different length", "word", "spaceship", false},
 		{"Not anagrams with same length", "music", "panda", false},
 		{"Not anagrams with same letters visually in eng and rus", "apec", "арес", false},
 		{"Not anagrams with same byte length", "pillow", "три", false},
-		{"Long almost anagrams",
+		{
+			"Long almost anagrams",
 			fmt.Sprint(
 				"mealssaintavengemealssalesbalmmeansaltsblotmelonblow" +
 					"moistsharpbragmoreshrubchumneedssirencoalnervedskidscounts" +
@@ -55,7 +59,8 @@ func TestAnagrams(t *testing.T) {
 					"OslofriedleappraysfingerNaplestacksAthenssparkticksdicespool" +
 					"tripschinsportdustykneestopsmeatpalmcaresToledosaltpearstovedimple" +
 					"freewaistloinboredswapsToledocorkswellplummoorstewcharmporethawshame"),
-			false},
+			false,
+		},
 	}
 
 	for _, test := range tests {

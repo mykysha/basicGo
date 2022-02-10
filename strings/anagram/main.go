@@ -16,7 +16,7 @@ func main() {
 	in := bufio.NewReader(os.Stdin)
 	reader := cl.NewReader(in)
 
-	msg := "Please enter your first word:\t"
+	msg := "\nPlease enter your first word:\t"
 
 	err := writer(msg)
 	if err != nil {
@@ -45,18 +45,13 @@ func main() {
 		log.Println(err)
 	}
 
-	if res {
-		msg = fmt.Sprintf("Words \"%s\" and \"%s\" are anagrams.", firstWord, secondWord)
+	msg = fmt.Sprintf("Words \"%s\" and \"%s\" are", firstWord, secondWord)
 
-		err = writer(msg)
-		if err != nil {
-			log.Println(err)
-		}
-
-		return
+	if !res {
+		msg += " not"
 	}
 
-	msg = fmt.Sprintf("Words \"%s\" and \"%s\" are not anagrams.", firstWord, secondWord)
+	msg += " anagrams\n"
 
 	err = writer(msg)
 	if err != nil {

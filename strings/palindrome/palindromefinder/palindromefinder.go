@@ -2,6 +2,7 @@ package palindromefinder
 
 import (
 	"fmt"
+
 	"github.com/nndergunov/basicGo/strings/palindrome/pool"
 )
 

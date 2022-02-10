@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/nndergunov/basicGo/strings/palindrome/palindromefinder"
 	"testing"
+
+	"github.com/nndergunov/basicGo/strings/palindrome/palindromefinder"
 )
 
 func BenchmarkTestSingleThreadPalindrome_regularPalindrome(b *testing.B) {
@@ -370,19 +371,23 @@ func TestPalindromesSingleThread(t *testing.T) {
 		{"All upper palindrome", "RACECAR", true},
 		{"Upper and lower palindrome", "TeNeT", true},
 		{"All lower palindrome", "mom", true},
-		{"Very long palindrome", fmt.Sprint(
-			"Annacivickayaklevelmadammomnoonracecarradarredderreferrepaperrotatorrotorsagassolosstatstenetwow" +
-				"wowtenetstatssolossagasrotorrotatorrepaperreferredderradarracecarnoonmommadamlevelkayakcivicanna"),
-			true},
+		{
+			"Very long palindrome", fmt.Sprint(
+				"Annacivickayaklevelmadammomnoonracecarradarredderreferrepaperrotatorrotorsagassolosstatstenetwow" +
+					"wowtenetstatssolossagasrotorrotatorrepaperreferredderradarracecarnoonmommadamlevelkayakcivicanna"),
+			true,
+		},
 
 		{"First upper not a palindrome", "Word", false},
 		{"All upper not a palindrome", "CAPS", false},
 		{"Upper and lower not a palindrome", "UpPeRlOwEr", false},
 		{"All lower not a palindrome", "alllower", false},
-		{"Very long not a palindrome", fmt.Sprint(
-			"Thisphraseisnotsupposedtoberegardedasapalindromecauseitisnotoneasiammakingthisoneup" +
-				"sothereisexactlyzerochancethattheresultisgoingtobetruehoweveritisbettertotestthoingsoutjustincase"),
-			false},
+		{
+			"Very long not a palindrome", fmt.Sprint(
+				"Thisphraseisnotsupposedtoberegardedasapalindromecauseitisnotoneasiammakingthisoneup" +
+					"sothereisexactlyzerochancethattheresultisgoingtobetruehoweveritisbettertotestthoingsoutjustincase"),
+			false,
+		},
 	}
 
 	for _, test := range tests {
@@ -413,19 +418,23 @@ func TestPalindromesMultiThread(t *testing.T) {
 		{"All upper palindrome", "RACECAR", true},
 		{"Upper and lower palindrome", "TeNeT", true},
 		{"All lower palindrome", "mom", true},
-		{"Very long palindrome", fmt.Sprint(
-			"Annacivickayaklevelmadammomnoonracecarradarredderreferrepaperrotatorrotorsagassolosstatstenetwow" +
-				"wowtenetstatssolossagasrotorrotatorrepaperreferredderradarracecarnoonmommadamlevelkayakcivicanna"),
-			true},
+		{
+			"Very long palindrome", fmt.Sprint(
+				"Annacivickayaklevelmadammomnoonracecarradarredderreferrepaperrotatorrotorsagassolosstatstenetwow" +
+					"wowtenetstatssolossagasrotorrotatorrepaperreferredderradarracecarnoonmommadamlevelkayakcivicanna"),
+			true,
+		},
 
 		{"First upper not a palindrome", "Word", false},
 		{"All upper not a palindrome", "CAPS", false},
 		{"Upper and lower not a palindrome", "UpPeRlOwEr", false},
 		{"All lower not a palindrome", "alllower", false},
-		{"Very long not a palindrome", fmt.Sprint(
-			"Thisphraseisnotsupposedtoberegardedasapalindromecauseitisnotoneasiammakingthisoneup" +
-				"sothereisexactlyzerochancethattheresultisgoingtobetruehoweveritisbettertotestthoingsoutjustincase"),
-			false},
+		{
+			"Very long not a palindrome", fmt.Sprint(
+				"Thisphraseisnotsupposedtoberegardedasapalindromecauseitisnotoneasiammakingthisoneup" +
+					"sothereisexactlyzerochancethattheresultisgoingtobetruehoweveritisbettertotestthoingsoutjustincase"),
+			false,
+		},
 	}
 
 	for _, test := range tests {
