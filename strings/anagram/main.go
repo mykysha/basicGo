@@ -41,21 +41,26 @@ func main() {
 		log.Println(err)
 	}
 
-	res := a.Compute(firstWord, secondWord)
+	res, err := a.Compute(firstWord, secondWord)
+	if err != nil {
+		log.Println(err)
+	}
 
 	if res {
-		msg = fmt.Sprintf("Words \"%s\" and \"%s\" are anagrams.", string(firstWord), string(secondWord))
+		msg = fmt.Sprintf("Words \"%s\" and \"%s\" are anagrams.", firstWord, secondWord)
 
 		err = writer(msg)
 		if err != nil {
 			log.Println(err)
 		}
-	} else {
-		msg = fmt.Sprintf("Words \"%s\" and \"%s\" are not anagrams.", string(firstWord), string(secondWord))
 
-		err = writer(msg)
-		if err != nil {
-			log.Println(err)
-		}
+		return
+	}
+
+	msg = fmt.Sprintf("Words \"%s\" and \"%s\" are not anagrams.", firstWord, secondWord)
+
+	err = writer(msg)
+	if err != nil {
+		log.Println(err)
 	}
 }

@@ -1,6 +1,7 @@
 package anagramfinder
 
 import (
+	"fmt"
 	"sync"
 	"time"
 )
@@ -32,7 +33,21 @@ func NewAnagramFinder() *AnagramFinder {
 	return &a
 }
 
-func (a *AnagramFinder) Compute(firstWord, secondWord []rune) bool {
+func (a *AnagramFinder) Compute(firstWordStr, secondWordStr string) (bool, error) {
+	firstWord, err := convertToRune(firstWordStr)
+	if err != nil {
+		return false, fmt.Errorf("first word to rune conversion: %w", err)
+	}
+
+	secondWord, err := convertToRune(secondWordStr)
+	if err != nil {
+		return false, fmt.Errorf("second word to rune conversion: %w", err)
+	}
+
+	if !isAWord(firstWord) || !isAWord(secondWord) {
+		return false, fmt.Errorf("word analysis: %w", errNotAWord)
+	}
+
 	for {
 		if a.computing {
 			time.Sleep(1 * time.Second)
@@ -55,7 +70,7 @@ func (a *AnagramFinder) Compute(firstWord, secondWord []rune) bool {
 	shouldCheckFurther := a.compareWordInfo()
 
 	if !shouldCheckFurther {
-		return false
+		return false, nil
 	}
 
 	wg := new(sync.WaitGroup)
@@ -78,16 +93,16 @@ func (a *AnagramFinder) Compute(firstWord, secondWord []rune) bool {
 	wg.Wait()
 
 	if len(a.firstWordByLetters) != len(a.secondWordByLetters) {
-		return false
+		return false, nil
 	}
 
 	for key, val := range a.firstWordByLetters {
 		if val != a.secondWordByLetters[key] {
-			return false
+			return false, nil
 		}
 	}
 
-	return true
+	return true, nil
 }
 
 func (a AnagramFinder) compareWordInfo() bool {
