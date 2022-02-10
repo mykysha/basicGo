@@ -3,6 +3,7 @@ package pool
 type workerPool interface {
 	Start()
 	AddTask(task func())
+	Stop()
 }
 
 type Pool struct {
@@ -15,7 +16,12 @@ func (p *Pool) Start() {
 	for i := 0; i < p.workerNumber; i++ {
 		go func() {
 			for task := range p.taskChan {
-				task()
+				select {
+				case <-p.stopChan:
+					break
+				default:
+					task()
+				}
 			}
 		}()
 	}
@@ -23,6 +29,10 @@ func (p *Pool) Start() {
 
 func (p *Pool) AddTask(task func()) {
 	p.taskChan <- task
+}
+
+func (p *Pool) Stop() {
+	close(p.stopChan)
 }
 
 func NewPool(workerNumber int) *Pool {
