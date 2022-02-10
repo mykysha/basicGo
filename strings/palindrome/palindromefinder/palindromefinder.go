@@ -55,6 +55,8 @@ func RunConcurrently(wordStr string) (bool, error) {
 		result := <-resultChan
 
 		if !result {
+			p.Stop()
+
 			return false, nil
 		}
 	}
