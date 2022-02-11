@@ -2,18 +2,14 @@ package slicesort
 
 import (
 	"github.com/nndergunov/basicGo/slices/slicesort/algorythms"
+	"math/rand"
 	"testing"
 )
 
+const sliceLength = 10000
+
 func BenchmarkBuiltIn(b *testing.B) {
-	slice := []int{
-		65, 82, 29, 87, 48, 39, 37, 95, 70, 33, 24, 38, 75, 7, 79, 51, 94, 85,
-		93, 41, 81, 90, 14, 18, 84, 52, 23, 62, 22, 78, 97, 96, 10, 9, 42, 20,
-		46, 58, 73, 68, 61, 57, 99, 5, 71, 59, 1, 8, 26, 72, 86, 64, 76, 31, 16,
-		12, 74, 40, 35, 0, 36, 49, 21, 47, 53, 91, 50, 54, 15, 17, 3, 2, 89, 11,
-		4, 55, 19, 69, 83, 43, 44, 63, 66, 27, 92, 13, 98, 6, 25, 56, 45, 32, 28,
-		67, 60, 100, 88, 30, 80, 77,
-	}
+	slice := createSlice(sliceLength)
 
 	b.ResetTimer()
 
@@ -21,14 +17,7 @@ func BenchmarkBuiltIn(b *testing.B) {
 }
 
 func BenchmarkSelection(b *testing.B) {
-	slice := []int{
-		65, 82, 29, 87, 48, 39, 37, 95, 70, 33, 24, 38, 75, 7, 79, 51, 94, 85,
-		93, 41, 81, 90, 14, 18, 84, 52, 23, 62, 22, 78, 97, 96, 10, 9, 42, 20,
-		46, 58, 73, 68, 61, 57, 99, 5, 71, 59, 1, 8, 26, 72, 86, 64, 76, 31, 16,
-		12, 74, 40, 35, 0, 36, 49, 21, 47, 53, 91, 50, 54, 15, 17, 3, 2, 89, 11,
-		4, 55, 19, 69, 83, 43, 44, 63, 66, 27, 92, 13, 98, 6, 25, 56, 45, 32, 28,
-		67, 60, 100, 88, 30, 80, 77,
-	}
+	slice := createSlice(sliceLength)
 
 	b.ResetTimer()
 
@@ -36,14 +25,7 @@ func BenchmarkSelection(b *testing.B) {
 }
 
 func BenchmarkBubble(b *testing.B) {
-	slice := []int{
-		65, 82, 29, 87, 48, 39, 37, 95, 70, 33, 24, 38, 75, 7, 79, 51, 94, 85,
-		93, 41, 81, 90, 14, 18, 84, 52, 23, 62, 22, 78, 97, 96, 10, 9, 42, 20,
-		46, 58, 73, 68, 61, 57, 99, 5, 71, 59, 1, 8, 26, 72, 86, 64, 76, 31, 16,
-		12, 74, 40, 35, 0, 36, 49, 21, 47, 53, 91, 50, 54, 15, 17, 3, 2, 89, 11,
-		4, 55, 19, 69, 83, 43, 44, 63, 66, 27, 92, 13, 98, 6, 25, 56, 45, 32, 28,
-		67, 60, 100, 88, 30, 80, 77,
-	}
+	slice := createSlice(sliceLength)
 
 	b.ResetTimer()
 
@@ -51,14 +33,7 @@ func BenchmarkBubble(b *testing.B) {
 }
 
 func BenchmarkPancake(b *testing.B) {
-	slice := []int{
-		65, 82, 29, 87, 48, 39, 37, 95, 70, 33, 24, 38, 75, 7, 79, 51, 94, 85,
-		93, 41, 81, 90, 14, 18, 84, 52, 23, 62, 22, 78, 97, 96, 10, 9, 42, 20,
-		46, 58, 73, 68, 61, 57, 99, 5, 71, 59, 1, 8, 26, 72, 86, 64, 76, 31, 16,
-		12, 74, 40, 35, 0, 36, 49, 21, 47, 53, 91, 50, 54, 15, 17, 3, 2, 89, 11,
-		4, 55, 19, 69, 83, 43, 44, 63, 66, 27, 92, 13, 98, 6, 25, 56, 45, 32, 28,
-		67, 60, 100, 88, 30, 80, 77,
-	}
+	slice := createSlice(sliceLength)
 
 	b.ResetTimer()
 
@@ -66,14 +41,7 @@ func BenchmarkPancake(b *testing.B) {
 }
 
 func BenchmarkRecursiveBubble(b *testing.B) {
-	slice := []int{
-		65, 82, 29, 87, 48, 39, 37, 95, 70, 33, 24, 38, 75, 7, 79, 51, 94, 85,
-		93, 41, 81, 90, 14, 18, 84, 52, 23, 62, 22, 78, 97, 96, 10, 9, 42, 20,
-		46, 58, 73, 68, 61, 57, 99, 5, 71, 59, 1, 8, 26, 72, 86, 64, 76, 31, 16,
-		12, 74, 40, 35, 0, 36, 49, 21, 47, 53, 91, 50, 54, 15, 17, 3, 2, 89, 11,
-		4, 55, 19, 69, 83, 43, 44, 63, 66, 27, 92, 13, 98, 6, 25, 56, 45, 32, 28,
-		67, 60, 100, 88, 30, 80, 77,
-	}
+	slice := createSlice(sliceLength)
 
 	l := len(slice) - 1
 
@@ -82,3 +50,34 @@ func BenchmarkRecursiveBubble(b *testing.B) {
 	_ = algorythms.RecursiveBubbleSort(slice, l)
 }
 
+func BenchmarkIterative(b *testing.B) {
+	slice := createSlice(sliceLength)
+
+	b.ResetTimer()
+
+	_ = algorythms.IterativeSort(slice)
+}
+
+func createSlice(length int) []int {
+	var slice []int
+
+	used := make(map[int]bool)
+
+	for i := 0; i < length; i++ {
+		var n int
+
+		for {
+			n = rand.Intn(length)
+
+			if !used[n] {
+				break
+			}
+		}
+
+		used[n] = true
+
+		slice = append(slice, n)
+	}
+
+	return slice
+}

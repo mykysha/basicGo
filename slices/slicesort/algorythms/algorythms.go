@@ -108,3 +108,24 @@ func RecursiveBubbleSort(slice []int, l int) []int {
 
 	return sortSlice
 }
+
+func IterativeSort(slice []int) []int {
+	sortSlice := make([]int, len(slice))
+
+	_ = copy(sortSlice, slice)
+
+	l := len(sortSlice)
+	for i := 1; i < l; i++ {
+		key := sortSlice[i]
+
+		var j int
+
+		for j = i - 1; j >= 0 && sortSlice[j] > key; j-- {
+			sortSlice[j+1] = sortSlice[j]
+		}
+
+		sortSlice[j+1] = key
+	}
+
+	return sortSlice
+}

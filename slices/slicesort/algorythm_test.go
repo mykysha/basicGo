@@ -156,3 +156,33 @@ func TestRecursiveBubble(t *testing.T) {
 		})
 	}
 }
+
+func TestIterative(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		testName      string
+		unsortedSlice []int
+		sortedSlice   []int
+	}{
+		{
+			"Iterative sort",
+			[]int{10, 9, 8, 7, 6, 5, 4, 3, 2, 1},
+			[]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.testName, func(t *testing.T) {
+			t.Parallel()
+
+			sliceSrtd := algorythms.IterativeSort(test.unsortedSlice)
+
+			for i := 0; i < len(test.sortedSlice); i++ {
+				if sliceSrtd[i] != test.sortedSlice[i] {
+					t.Errorf("wanted %v, got %v", test.sortedSlice, sliceSrtd)
+				}
+			}
+		})
+	}
+}
