@@ -1,4 +1,4 @@
-package algorythms
+package algorithms
 
 import (
 	"sort"

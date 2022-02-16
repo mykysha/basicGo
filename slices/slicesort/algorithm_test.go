@@ -1,8 +1,9 @@
-package slicesort
+package slicesort_test
 
 import (
-	"github.com/nndergunov/basicGo/slices/slicesort/algorythms"
 	"testing"
+
+	"github.com/nndergunov/basicGo/slices/slicesort/algorithms"
 )
 
 func TestBuiltIn(t *testing.T) {
@@ -24,7 +25,7 @@ func TestBuiltIn(t *testing.T) {
 		t.Run(test.testName, func(t *testing.T) {
 			t.Parallel()
 
-			sliceSrtd := algorythms.BuiltInSort(test.unsortedSlice)
+			sliceSrtd := algorithms.BuiltInSort(test.unsortedSlice)
 
 			for i := 0; i < len(test.sortedSlice); i++ {
 				if sliceSrtd[i] != test.sortedSlice[i] {
@@ -54,7 +55,7 @@ func TestSelection(t *testing.T) {
 		t.Run(test.testName, func(t *testing.T) {
 			t.Parallel()
 
-			sliceSrtd := algorythms.SelectionSort(test.unsortedSlice)
+			sliceSrtd := algorithms.SelectionSort(test.unsortedSlice)
 
 			for i := 0; i < len(test.sortedSlice); i++ {
 				if sliceSrtd[i] != test.sortedSlice[i] {
@@ -84,7 +85,7 @@ func TestBubble(t *testing.T) {
 		t.Run(test.testName, func(t *testing.T) {
 			t.Parallel()
 
-			sliceSrtd := algorythms.BubbleSort(test.unsortedSlice)
+			sliceSrtd := algorithms.BubbleSort(test.unsortedSlice)
 
 			for i := 0; i < len(test.sortedSlice); i++ {
 				if sliceSrtd[i] != test.sortedSlice[i] {
@@ -114,7 +115,7 @@ func TestPancake(t *testing.T) {
 		t.Run(test.testName, func(t *testing.T) {
 			t.Parallel()
 
-			sliceSrtd := algorythms.PancakeSort(test.unsortedSlice)
+			sliceSrtd := algorithms.PancakeSort(test.unsortedSlice)
 
 			for i := 0; i < len(test.sortedSlice); i++ {
 				if sliceSrtd[i] != test.sortedSlice[i] {
@@ -146,7 +147,7 @@ func TestRecursiveBubble(t *testing.T) {
 
 			l := len(test.unsortedSlice) - 1
 
-			sliceSrtd := algorythms.RecursiveBubbleSort(test.unsortedSlice, l)
+			sliceSrtd := algorithms.RecursiveBubbleSort(test.unsortedSlice, l)
 
 			for i := 0; i < len(test.sortedSlice); i++ {
 				if sliceSrtd[i] != test.sortedSlice[i] {
@@ -176,7 +177,7 @@ func TestIterative(t *testing.T) {
 		t.Run(test.testName, func(t *testing.T) {
 			t.Parallel()
 
-			sliceSrtd := algorythms.IterativeSort(test.unsortedSlice)
+			sliceSrtd := algorithms.IterativeSort(test.unsortedSlice)
 
 			for i := 0; i < len(test.sortedSlice); i++ {
 				if sliceSrtd[i] != test.sortedSlice[i] {

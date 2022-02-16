@@ -1,9 +1,10 @@
-package slicesort
+package slicesort_test
 
 import (
-	"github.com/nndergunov/basicGo/slices/slicesort/algorythms"
 	"math/rand"
 	"testing"
+
+	"github.com/nndergunov/basicGo/slices/slicesort/algorithms"
 )
 
 const sliceLength = 10000
@@ -13,7 +14,7 @@ func BenchmarkBuiltIn(b *testing.B) {
 
 	b.ResetTimer()
 
-	_ = algorythms.BuiltInSort(slice)
+	_ = algorithms.BuiltInSort(slice)
 }
 
 func BenchmarkSelection(b *testing.B) {
@@ -21,7 +22,7 @@ func BenchmarkSelection(b *testing.B) {
 
 	b.ResetTimer()
 
-	_ = algorythms.SelectionSort(slice)
+	_ = algorithms.SelectionSort(slice)
 }
 
 func BenchmarkBubble(b *testing.B) {
@@ -29,7 +30,7 @@ func BenchmarkBubble(b *testing.B) {
 
 	b.ResetTimer()
 
-	_ = algorythms.BubbleSort(slice)
+	_ = algorithms.BubbleSort(slice)
 }
 
 func BenchmarkPancake(b *testing.B) {
@@ -37,7 +38,7 @@ func BenchmarkPancake(b *testing.B) {
 
 	b.ResetTimer()
 
-	_ = algorythms.PancakeSort(slice)
+	_ = algorithms.PancakeSort(slice)
 }
 
 func BenchmarkRecursiveBubble(b *testing.B) {
@@ -47,7 +48,7 @@ func BenchmarkRecursiveBubble(b *testing.B) {
 
 	b.ResetTimer()
 
-	_ = algorythms.RecursiveBubbleSort(slice, l)
+	_ = algorithms.RecursiveBubbleSort(slice, l)
 }
 
 func BenchmarkIterative(b *testing.B) {
@@ -55,7 +56,7 @@ func BenchmarkIterative(b *testing.B) {
 
 	b.ResetTimer()
 
-	_ = algorythms.IterativeSort(slice)
+	_ = algorithms.IterativeSort(slice)
 }
 
 func createSlice(length int) []int {
