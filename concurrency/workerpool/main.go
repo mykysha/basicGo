@@ -17,7 +17,10 @@ func main() {
 	out := bufio.NewWriter(os.Stdout)
 	writeLine := newWriter(out)
 
-	for i := -11; i < 13; i++ {
+	firstTimeZone := -11
+	lastTimeZone := 13
+
+	for i := firstTimeZone; i < lastTimeZone; i++ {
 		zones = append(zones, i)
 	}
 
@@ -63,12 +66,13 @@ func main() {
 }
 
 func calculateWorldTime(zone int) time.Time {
-	if zone < -11 {
-		zone = 1
-	} else {
-		if zone > 12 {
-			zone = 24
-		}
+	minimalZone := -11
+	maximalZone := 12
+
+	if zone < minimalZone {
+		zone = minimalZone
+	} else if zone > maximalZone {
+		zone = maximalZone
 	}
 
 	timeInZone := time.Now().UTC().Add(time.Hour * time.Duration(zone))

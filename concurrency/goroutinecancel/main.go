@@ -13,13 +13,9 @@ import (
 // main func starts new goroutine and waits for user to stop its execution.
 func main() {
 	l := log.New(os.Stdout, "gc ", log.Ltime)
-	l.Println("logger created")
+	writer := newWriter(bufio.NewWriter(os.Stdout))
 
-	out := bufio.NewWriter(os.Stdout)
-	l.Println("output configured")
-
-	in := bufio.NewReader(os.Stdin)
-	l.Println("input configured")
+	l.Println("output and logger configured")
 
 	var (
 		wasAliveFor time.Duration
@@ -31,29 +27,12 @@ func main() {
 	go routine(&wasAliveFor, &reachedEnd, signal)
 	l.Println("routine started")
 
-	oldState, err := term.MakeRaw(int(os.Stdin.Fd()))
-	if err != nil {
-		l.Fatalln(err)
-	}
-
-	defer func(fd int, oldState *term.State) {
-		err = term.Restore(fd, oldState)
-		if err != nil {
-			l.Println(err)
-		}
-	}(int(os.Stdin.Fd()), oldState)
-
-	_, err = out.WriteString("press any key to kill goroutine\n")
+	err := writer("press any key to kill goroutine\n")
 	if err != nil {
 		l.Println(err)
 	}
 
-	err = out.Flush()
-	if err != nil {
-		l.Println(err)
-	}
-
-	_, err = in.ReadByte()
+	err = getKey()
 	if err != nil {
 		l.Println(err)
 	}
@@ -70,12 +49,7 @@ func main() {
 		msg += "routine had not reached its end\n"
 	}
 
-	_, err = out.WriteString(msg)
-	if err != nil {
-		l.Println(err)
-	}
-
-	err = out.Flush()
+	err = writer(msg)
 	if err != nil {
 		l.Println(err)
 	}
@@ -87,6 +61,10 @@ func main() {
 func routine(isAliveFor *time.Duration, e *bool, s chan interface{}) {
 	start := time.Now()
 
+	sleepFor := 100
+
+	sleepTime := time.Duration(sleepFor) * time.Millisecond
+
 	for {
 		select {
 		case <-s:
@@ -96,7 +74,46 @@ func routine(isAliveFor *time.Duration, e *bool, s chan interface{}) {
 
 			*e = true
 
-			time.Sleep(100 * time.Millisecond)
+			time.Sleep(sleepTime)
 		}
+	}
+}
+
+func getKey() error {
+	in := bufio.NewReader(os.Stdin)
+
+	oldState, err := term.MakeRaw(int(os.Stdin.Fd()))
+	if err != nil {
+		return fmt.Errorf("making raw: %w", err)
+	}
+
+	defer func(fd int, oldState *term.State) {
+		err = term.Restore(fd, oldState)
+		if err != nil {
+			panic(fmt.Errorf("could not restore %w", err))
+		}
+	}(int(os.Stdin.Fd()), oldState)
+
+	_, err = in.ReadByte()
+	if err != nil {
+		return fmt.Errorf("reading: %w", err)
+	}
+
+	return nil
+}
+
+func newWriter(out *bufio.Writer) func(s string) error {
+	return func(s string) error {
+		_, err := out.WriteString(s)
+		if err != nil {
+			return fmt.Errorf("write: %w", err)
+		}
+
+		err = out.Flush()
+		if err != nil {
+			return fmt.Errorf("flush: %w", err)
+		}
+
+		return nil
 	}
 }

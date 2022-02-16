@@ -6,7 +6,7 @@ import (
 	"github.com/nndergunov/basicGo/strings/palindrome/pool"
 )
 
-func Run(wordStr string) (bool, error) {
+func CheckIfPalindrome(wordStr string) (bool, error) {
 	word, err := convertToRune(wordStr)
 	if err != nil {
 		return false, fmt.Errorf("string to rune conversion: %w", err)
@@ -19,7 +19,7 @@ func Run(wordStr string) (bool, error) {
 	return checkIfPalindrome(word), nil
 }
 
-func RunConcurrently(wordStr string) (bool, error) {
+func CheckIfPalindromeConcurrently(wordStr string) (bool, error) {
 	word, err := convertToRune(wordStr)
 	if err != nil {
 		return false, fmt.Errorf("string to rune conversion: %w", err)
@@ -76,17 +76,19 @@ func makeSubstrings(word []rune, substringLength int) [][]rune {
 		return substrings
 	}
 
-	if substringLength < 2 {
-		substringLength = 2
+	if minimalSubstringLength := 2; substringLength < minimalSubstringLength {
+		substringLength = minimalSubstringLength
 	}
 
-	substringLength /= 2
+	numberOfHalves := 2
 
-	firstHalf := word[:len(word)/2]
+	substringLength /= numberOfHalves
+
+	firstHalf := word[:len(word)/numberOfHalves]
 	secondHalf := word[(len(word) - len(word)/2):]
 
 	for from, till := 0, substringLength; till <= len(firstHalf); from, till = from+substringLength, till+substringLength {
-		substring := make([]rune, substringLength*2)
+		substring := make([]rune, substringLength*numberOfHalves)
 
 		firstSubstring := firstHalf[from:till]
 		secondSubstring := secondHalf[len(secondHalf)-till : len(secondHalf)-from]
@@ -101,7 +103,7 @@ func makeSubstrings(word []rune, substringLength int) [][]rune {
 		tail := len(firstHalf) % substringLength
 		wrote := len(firstHalf) - tail
 
-		lastSubstring := make([]rune, tail*2)
+		lastSubstring := make([]rune, tail*numberOfHalves)
 
 		copy(lastSubstring, firstHalf[wrote:])
 		copy(lastSubstring[tail:], secondHalf[:len(secondHalf)-wrote])

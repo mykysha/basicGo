@@ -7,7 +7,10 @@ import (
 	"unicode/utf8"
 )
 
-var errNotAWord = errors.New("the string that was read is not a word")
+var (
+	errNotAWord  = errors.New("the string that was read is not a word")
+	errRuneError = errors.New("received rune error during conversion")
+)
 
 // checkIfPalindrome finds out can the given []rune be read backwards or not.
 func checkIfPalindrome(word []rune) bool {
@@ -39,7 +42,7 @@ func convertToRune(wordStr string) ([]rune, error) {
 				break
 			}
 
-			return nil, fmt.Errorf("string to rune conversion")
+			return nil, fmt.Errorf("string to rune conversion, %w", errRuneError)
 		}
 
 		word = append(word, symbol)

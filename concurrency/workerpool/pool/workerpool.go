@@ -36,7 +36,7 @@ func (p *Pool) Stop() {
 }
 
 func NewPool(workerNumber int) *Pool {
-	taskChan := make(chan func(), 24)
+	taskChan := make(chan func(), workerNumber)
 	stopChan := make(chan interface{})
 
 	return &Pool{

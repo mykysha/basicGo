@@ -32,7 +32,7 @@ func main() {
 
 	res := fmt.Sprintf("\nThe word \"%s\" is", word)
 
-	result, err := palindromefinder.RunConcurrently(word)
+	result, err := palindromefinder.CheckIfPalindromeConcurrently(word)
 	if err != nil {
 		log.Println(err)
 	}

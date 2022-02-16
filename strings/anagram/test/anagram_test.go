@@ -1,4 +1,4 @@
-package main
+package anagram_test
 
 import (
 	"fmt"
@@ -63,11 +63,13 @@ func TestAnagrams(t *testing.T) {
 		},
 	}
 
-	for _, test := range tests {
+	for _, currentTest := range tests {
+		test := currentTest
+
 		t.Run(test.testName, func(t *testing.T) {
 			t.Parallel()
 
-			res, err := anagramfinder.Run(test.firstWord, test.secondWord)
+			res, err := anagramfinder.CheckIfAnagram(test.firstWord, test.secondWord)
 			if err != nil {
 				t.Errorf("unexpected error: %v", err)
 			}

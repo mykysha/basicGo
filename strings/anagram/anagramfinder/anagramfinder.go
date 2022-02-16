@@ -5,7 +5,7 @@ import (
 	"sync"
 )
 
-func Run(firstWordStr, secondWordStr string) (bool, error) {
+func CheckIfAnagram(firstWordStr, secondWordStr string) (bool, error) {
 	firstWord, err := convertToRune(firstWordStr)
 	if err != nil {
 		return false, fmt.Errorf("first word to rune conversion: %w", err)
@@ -31,7 +31,7 @@ func Run(firstWordStr, secondWordStr string) (bool, error) {
 
 	wg.Add(numberOfWords)
 
-	lettersChan := make(chan map[rune]uint, 2)
+	lettersChan := make(chan map[rune]uint, numberOfWords)
 
 	go func(wg *sync.WaitGroup) {
 		lettersChan <- sort(firstWord)
@@ -73,7 +73,7 @@ func compareWordInfo(firstWord, secondWord []rune) bool {
 
 	wg.Add(numberOfWords)
 
-	lengthChan := make(chan int, 2)
+	lengthChan := make(chan int, numberOfWords)
 
 	go func(wg *sync.WaitGroup) {
 		lengthChan <- findByteLength(firstWord)
@@ -92,11 +92,7 @@ func compareWordInfo(firstWord, secondWord []rune) bool {
 	firstByteLength := <-lengthChan
 	secondByteLength := <-lengthChan
 
-	if firstByteLength != secondByteLength {
-		return false
-	}
-
-	return true
+	return firstByteLength == secondByteLength
 }
 
 func sort(r []rune) map[rune]uint {

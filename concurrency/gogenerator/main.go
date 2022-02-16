@@ -12,8 +12,10 @@ func count(start int, end int) chan int {
 	ch := make(chan int)
 	closeChan := make(chan bool)
 
+	numberOfParts := 2
+
 	go func(ch chan int, clCh chan bool) {
-		for i := start; i <= end/2; i++ {
+		for i := start; i <= end/numberOfParts; i++ {
 			ch <- i + rand.Int()
 		}
 
@@ -21,7 +23,7 @@ func count(start int, end int) chan int {
 	}(ch, closeChan)
 
 	go func(ch chan int, clCh chan bool) {
-		for i := end/2 + 1; i <= end; i++ {
+		for i := end/numberOfParts + 1; i <= end; i++ {
 			ch <- i + rand.Int()
 		}
 
@@ -41,12 +43,15 @@ func count(start int, end int) chan int {
 
 func main() {
 	out := bufio.NewWriter(os.Stdout)
+
 	err := writeLine("calculating 100 pseudorandom numbers", out)
 	if err != nil {
 		log.Println(err)
 	}
 
-	for i := range count(1, 99) {
+	calculationRange := 99
+
+	for i := range count(1, calculationRange) {
 		msg := fmt.Sprintf("number %d was generated", i)
 
 		err = writeLine(msg, out)

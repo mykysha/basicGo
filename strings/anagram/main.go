@@ -40,7 +40,7 @@ func main() {
 		log.Println(err)
 	}
 
-	res, err := anagramfinder.Run(firstWord, secondWord)
+	res, err := anagramfinder.CheckIfAnagram(firstWord, secondWord)
 	if err != nil {
 		log.Println(err)
 	}

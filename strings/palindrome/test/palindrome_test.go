@@ -1,4 +1,4 @@
-package main
+package palindrome_test
 
 import (
 	"fmt"
@@ -13,7 +13,7 @@ func BenchmarkTestSingleThreadPalindrome_regularPalindrome(b *testing.B) {
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		res, err := palindromefinder.Run(regularPalindrome)
+		res, err := palindromefinder.CheckIfPalindrome(regularPalindrome)
 
 		if !res || err != nil {
 			b.Fail()
@@ -27,7 +27,7 @@ func BenchmarkTestSingleThreadPalindrome_regularWord(b *testing.B) {
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		res, err := palindromefinder.Run(regularWord)
+		res, err := palindromefinder.CheckIfPalindrome(regularWord)
 
 		if res || err != nil {
 			b.Fail()
@@ -43,7 +43,7 @@ func BenchmarkTestSingleThreadPalindrome_longPalindrome(b *testing.B) {
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		res, err := palindromefinder.Run(longPalindrome)
+		res, err := palindromefinder.CheckIfPalindrome(longPalindrome)
 
 		if !res || err != nil {
 			b.Fail()
@@ -59,7 +59,7 @@ func BenchmarkTestSingleThreadPalindrome_longWord(b *testing.B) {
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		res, err := palindromefinder.Run(longWord)
+		res, err := palindromefinder.CheckIfPalindrome(longWord)
 
 		if res || err != nil {
 			b.Fail()
@@ -117,7 +117,7 @@ func BenchmarkTestSingleThreadPalindrome_veryLongPalindrome(b *testing.B) {
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		res, err := palindromefinder.Run(veryLongPalindrome)
+		res, err := palindromefinder.CheckIfPalindrome(veryLongPalindrome)
 
 		if !res || err != nil {
 			b.Fail()
@@ -175,7 +175,7 @@ func BenchmarkTestSingleThreadPalindrome_veryLongWord(b *testing.B) {
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		res, err := palindromefinder.Run(veryLongWord)
+		res, err := palindromefinder.CheckIfPalindrome(veryLongWord)
 
 		if res || err != nil {
 			b.Fail()
@@ -189,7 +189,7 @@ func BenchmarkTestMultiThreadPalindrome_regularPalindrome(b *testing.B) {
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		res, err := palindromefinder.Run(regularPalindrome)
+		res, err := palindromefinder.CheckIfPalindrome(regularPalindrome)
 
 		if !res || err != nil {
 			b.Fail()
@@ -203,7 +203,7 @@ func BenchmarkTestMultiThreadPalindrome_regularWord(b *testing.B) {
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		res, err := palindromefinder.Run(regularWord)
+		res, err := palindromefinder.CheckIfPalindrome(regularWord)
 
 		if res || err != nil {
 			b.Fail()
@@ -219,7 +219,7 @@ func BenchmarkTestMultiThreadPalindrome_longPalindrome(b *testing.B) {
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		res, err := palindromefinder.Run(longPalindrome)
+		res, err := palindromefinder.CheckIfPalindrome(longPalindrome)
 
 		if !res || err != nil {
 			b.Fail()
@@ -235,7 +235,7 @@ func BenchmarkTestMultiThreadPalindrome_longWord(b *testing.B) {
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		res, err := palindromefinder.Run(longWord)
+		res, err := palindromefinder.CheckIfPalindrome(longWord)
 
 		if res || err != nil {
 			b.Fail()
@@ -293,7 +293,7 @@ func BenchmarkTestMultiThreadPalindrome_veryLongPalindrome(b *testing.B) {
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		res, err := palindromefinder.Run(veryLongPalindrome)
+		res, err := palindromefinder.CheckIfPalindrome(veryLongPalindrome)
 
 		if !res || err != nil {
 			b.Fail()
@@ -351,7 +351,7 @@ func BenchmarkTestMultiThreadPalindrome_veryLongWord(b *testing.B) {
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		res, err := palindromefinder.Run(veryLongWord)
+		res, err := palindromefinder.CheckIfPalindrome(veryLongWord)
 
 		if res || err != nil {
 			b.Fail()
@@ -390,13 +390,15 @@ func TestPalindromesSingleThread(t *testing.T) {
 		},
 	}
 
-	for _, test := range tests {
+	for _, currentTest := range tests {
+		test := currentTest
+
 		t.Run(test.testName, func(t *testing.T) {
 			t.Parallel()
 
-			res, err := palindromefinder.Run(test.word)
+			res, err := palindromefinder.CheckIfPalindrome(test.word)
 			if err != nil {
-				t.Errorf("did not expect to recieve an error")
+				t.Errorf("did not expect to receive an error")
 			}
 
 			if res != test.expectedResult {
@@ -437,13 +439,15 @@ func TestPalindromesMultiThread(t *testing.T) {
 		},
 	}
 
-	for _, test := range tests {
+	for _, currentTest := range tests {
+		test := currentTest
+
 		t.Run(test.testName, func(t *testing.T) {
 			t.Parallel()
 
-			res, err := palindromefinder.RunConcurrently(test.word)
+			res, err := palindromefinder.CheckIfPalindromeConcurrently(test.word)
 			if err != nil {
-				t.Errorf("did not expect to recieve an error")
+				t.Errorf("did not expect to receive an error")
 			}
 
 			if res != test.expectedResult {
