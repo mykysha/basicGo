@@ -5,4 +5,4 @@
 # Strings:
 ## palindrome - program that checks if a word is a palindrome
 
-## anagram - program that checks if two words are anagrams
+## anagram - program that checks if two wordst are anagrams
