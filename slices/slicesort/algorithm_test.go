@@ -21,7 +21,9 @@ func TestBuiltIn(t *testing.T) {
 		},
 	}
 
-	for _, test := range tests {
+	for _, currentTest := range tests {
+		test := currentTest
+
 		t.Run(test.testName, func(t *testing.T) {
 			t.Parallel()
 
@@ -51,7 +53,9 @@ func TestSelection(t *testing.T) {
 		},
 	}
 
-	for _, test := range tests {
+	for _, currentTest := range tests {
+		test := currentTest
+
 		t.Run(test.testName, func(t *testing.T) {
 			t.Parallel()
 
@@ -81,7 +85,9 @@ func TestBubble(t *testing.T) {
 		},
 	}
 
-	for _, test := range tests {
+	for _, currentTest := range tests {
+		test := currentTest
+
 		t.Run(test.testName, func(t *testing.T) {
 			t.Parallel()
 
@@ -111,7 +117,9 @@ func TestPancake(t *testing.T) {
 		},
 	}
 
-	for _, test := range tests {
+	for _, currentTest := range tests {
+		test := currentTest
+
 		t.Run(test.testName, func(t *testing.T) {
 			t.Parallel()
 
@@ -141,7 +149,9 @@ func TestRecursiveBubble(t *testing.T) {
 		},
 	}
 
-	for _, test := range tests {
+	for _, currentTest := range tests {
+		test := currentTest
+
 		t.Run(test.testName, func(t *testing.T) {
 			t.Parallel()
 
@@ -173,7 +183,9 @@ func TestIterative(t *testing.T) {
 		},
 	}
 
-	for _, test := range tests {
+	for _, currentTest := range tests {
+		test := currentTest
+
 		t.Run(test.testName, func(t *testing.T) {
 			t.Parallel()
 
