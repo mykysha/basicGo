@@ -7,7 +7,7 @@ import (
 	"github.com/nndergunov/basicGo/slices/slicesort/algorithms"
 )
 
-const sliceLength = 10000
+const sliceLength = 100000
 
 func BenchmarkBuiltIn(b *testing.B) {
 	slice := createSlice(sliceLength)

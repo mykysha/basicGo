@@ -5,26 +5,29 @@ import "errors"
 var errOutOfRange = errors.New("trying to dequeue an empty queue")
 
 func NewQueue() SliceQueue {
-	return SliceQueue{}
+	return SliceQueue{
+		length: 0,
+		queue:  nil,
+	}
 }
 
 type Queue interface {
-	Enqueue(func())
-	Dequeue() (func(), error)
+	Enqueue(interface{})
+	Dequeue() (interface{}, error)
 }
 
 type SliceQueue struct {
 	length int
-	queue  []func()
+	queue  []interface{}
 }
 
-func (q *SliceQueue) Enqueue(element func()) {
+func (q *SliceQueue) Enqueue(element interface{}) {
 	q.queue = append(q.queue, element)
 
 	q.length++
 }
 
-func (q *SliceQueue) Dequeue() (element func(), err error) {
+func (q *SliceQueue) Dequeue() (element interface{}, err error) {
 	if q.length < 1 {
 		return nil, errOutOfRange
 	}

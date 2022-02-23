@@ -1,19 +1,26 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"os"
-	"time"
 
+	"github.com/nndergunov/basicGo/slices/goqueue/printer"
 	"github.com/nndergunov/basicGo/slices/goqueue/queue"
 )
 
+var errUnexpectedType = errors.New("did not expect to get type: ")
+
 func main() {
+	pl := log.New(os.Stdout, "printer ", log.LstdFlags)
+	l := log.New(os.Stdout, "main ", log.LstdFlags)
+
+	p := printer.NewPrinter(pl)
+
 	var documents []string
 
 	numberOfDocuments := 5
-	l := log.New(os.Stdout, "printer ", log.LstdFlags)
 
 	for i := 0; i < numberOfDocuments; i++ {
 		documents = append(documents, fmt.Sprintf("document%d.txt", i))
@@ -24,17 +31,7 @@ func main() {
 	for _, val := range documents {
 		document := val
 
-		toPrint := func() {
-			printSeconds := 3
-
-			printTime := time.Second * time.Duration(printSeconds)
-
-			time.Sleep(printTime)
-
-			l.Printf("document %s had been printed", document)
-		}
-
-		q.Enqueue(toPrint)
+		q.Enqueue(document)
 	}
 
 	queueLen := q.GetLength()
@@ -45,6 +42,11 @@ func main() {
 			l.Print(err)
 		}
 
-		task()
+		doc, ok := task.(string)
+		if !ok {
+			l.Print(errUnexpectedType)
+		}
+
+		p.Print(doc)
 	}
 }
