@@ -21,7 +21,7 @@ func main() {
 		"Northern rockhopper", "Royal", "Macaroni",
 	}
 
-	penguins := binarytree.NewBinaryNode(species[0])
+	penguins := binarytree.NewBinaryTree()
 
 	for _, val := range species {
 		err := penguins.Insert(val)
@@ -53,7 +53,7 @@ func main() {
 	}
 
 	for _, val := range orderedPenguins {
-		err = writer(fmt.Sprintf("%s penguin\n", val))
+		err = writer(fmt.Sprintf("%s penguin\n", val.(string)))
 		if err != nil {
 			log.Println(err)
 		}

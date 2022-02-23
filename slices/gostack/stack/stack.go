@@ -4,28 +4,31 @@ import "errors"
 
 var errOutOfRange = errors.New("trying to get element from an empty stack")
 
-func NewStack() SliceStack {
-	return SliceStack{}
-}
-
 type Stack interface {
-	Push(func())
-	Pop() (func(), error)
-	Peek() (func(), error)
+	Push(interface{})
+	Pop() (interface{}, error)
+	Peek() (interface{}, error)
 }
 
 type SliceStack struct {
 	length int
-	stack  []func()
+	stack  []interface{}
 }
 
-func (s *SliceStack) Push(element func()) {
+func NewStack() SliceStack {
+	return SliceStack{
+		length: 0,
+		stack:  nil,
+	}
+}
+
+func (s *SliceStack) Push(element interface{}) {
 	s.stack = append(s.stack, element)
 
 	s.length++
 }
 
-func (s *SliceStack) Pop() (element func(), err error) {
+func (s *SliceStack) Pop() (element interface{}, err error) {
 	if s.length < 1 {
 		return nil, errOutOfRange
 	}
@@ -39,7 +42,7 @@ func (s *SliceStack) Pop() (element func(), err error) {
 	return element, nil
 }
 
-func (s SliceStack) Peek() (element func(), err error) {
+func (s SliceStack) Peek() (element interface{}, err error) {
 	if s.length < 1 {
 		return nil, errOutOfRange
 	}
