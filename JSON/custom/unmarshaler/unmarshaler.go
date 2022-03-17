@@ -9,6 +9,7 @@ const (
 	stringType  = "string"
 	numberType  = "float64"
 	booleanType = "bool"
+	arrayType   = "array of interfaces"
 )
 
 const (
@@ -25,19 +26,20 @@ const (
 	commaSymbol              = ','
 )
 
-var (
-	ErrNotPossibleToMarshal     = errors.New("given byte array is not possible to marshal")
-	errUnexpectedSquareBracket  = errors.New("unexpected \"]\"")
-	errUnexpectedFigureeBracket = errors.New("unexpected \"}\"")
-	errBracketNotClosed         = errors.New("brackets were opened, but never closed")
-	errTrailingComma            = errors.New("unexpected comma at the end")
-)
+var ErrNotPossibleToMarshal = errors.New("given byte array is not possible to marshal")
 
 func Unmarshal(data []byte) (res interface{}, resType string, err error) {
 	unicodeData := convertToRune(data)
 
+	firstEl := unicodeData[0]
+	lastEl := unicodeData[len(unicodeData)-1]
+
 	switch {
-	case unicodeData[0] == doubleQuoteSymbol && unicodeData[len(unicodeData)-1] == doubleQuoteSymbol:
+	case firstEl == leftArrayBracketSymbol && lastEl == rightArrayBracketSymbol:
+		res, err := arrayUnmarshal(unicodeData)
+
+		return res, arrayType, err
+	case firstEl == doubleQuoteSymbol && lastEl == doubleQuoteSymbol:
 		return stringUnmarshal(unicodeData), stringType, nil
 	case isNumber(unicodeData):
 		return numberUnmarshal(unicodeData), numberType, nil
