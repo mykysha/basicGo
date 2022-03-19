@@ -38,9 +38,7 @@ func convertToRune(data []byte) []rune {
 
 		symbol = unicode.ToLower(symbol)
 
-		if !unicode.IsSpace(symbol) {
-			res = append(res, symbol)
-		}
+		res = append(res, symbol)
 
 		total += runeCount
 

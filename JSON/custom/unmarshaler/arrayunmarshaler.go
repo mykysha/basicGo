@@ -3,6 +3,7 @@ package unmarshaler
 import (
 	"errors"
 	"fmt"
+	"unicode"
 )
 
 const backslashSymbol = '\\'
@@ -59,6 +60,12 @@ func (a *arrayInfo) unmarshal() error {
 	for a.read < len(a.data) {
 		symbol := a.data[a.read]
 
+		if unicode.IsSpace(symbol) {
+			a.read++
+
+			continue
+		}
+
 		switch symbol {
 		case doubleQuoteSymbol:
 			err := a.handleString()
@@ -82,6 +89,8 @@ func (a *arrayInfo) unmarshal() error {
 }
 
 func (a *arrayInfo) handleString() error {
+	a.currentObject = append(a.currentObject, doubleQuoteSymbol)
+
 	a.read++
 
 	for a.read < len(a.data) {
@@ -107,6 +116,8 @@ func (a *arrayInfo) handleString() error {
 
 		case doubleQuoteSymbol:
 			if a.read == len(a.data) || a.data[a.read] == commaSymbol {
+				a.read++
+
 				return a.unmarshalElement()
 			}
 

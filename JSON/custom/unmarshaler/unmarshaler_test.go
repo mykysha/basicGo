@@ -28,7 +28,7 @@ func TestUnmarshal(t *testing.T) {
 		},
 		{
 			name: "single string test",
-			data: "rmwgfy",
+			data: "russian military warship go yourself",
 		},
 
 		{
